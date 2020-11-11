@@ -1,5 +1,5 @@
-import React from "react";
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import React, { Component } from "react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
 	width: "400px",
@@ -7,37 +7,26 @@ const containerStyle = {
 };
 
 const center = {
-	lat: -3.745,
-	lng: -38.523,
+	lat: 41.499321,
+	lng: -81.694359,
 };
 
-function MapComponent() {
-	const [map, setMap] = React.useState(null);
-
-	const onLoad = React.useCallback(function callback(map) {
-		const bounds = new window.google.maps.LatLngBounds();
-		map.fitBounds(bounds);
-		setMap(map);
-	}, []);
-
-	const onUnmount = React.useCallback(function callback(map) {
-		setMap(null);
-	}, []);
-
-	return (
-		<LoadScript googleMapsApiKey="AIzaSyB0hzDw4DXhAxddRlhOjV5Um6b7rbZhOtw">
-			<GoogleMap
-				mapContainerStyle={containerStyle}
-				center={center}
-				zoom={10}
-				onLoad={onLoad}
-				onUnmount={onUnmount}
-			>
-				{/* Child components, such as markers, info windows, etc. */}
-				<></>
-			</GoogleMap>
-		</LoadScript>
-	);
+class MapComponent extends Component {
+	render() {
+		const { markerPos } = this.props;
+		console.log(markerPos);
+		return (
+			<LoadScript googleMapsApiKey="AIzaSyCakVDrjELYKNT7SjRIvSl1YbgVMtm3u4o">
+				<GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+					{markerPos.map((pos) => (
+						<Marker position={pos} key={markerPos.indexOf(pos)} />
+					))}
+					{/* Child components, such as markers, info windows, etc. */}
+					<></>
+				</GoogleMap>
+			</LoadScript>
+		);
+	}
 }
 
-export default React.memo(MapComponent);
+export default MapComponent;
